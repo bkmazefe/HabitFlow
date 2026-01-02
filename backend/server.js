@@ -474,8 +474,27 @@ app.post("/api/auth/change-password", requireAuth, (req, res) => {
   res.json({ message: "Password changed successfully", st: true });
 });
 
-app.delete("/api/user/account", (req, res) => {
-  //TODO:
+app.delete("/api/user/account", requireAuth, (req, res) => {
+  const userId = req.session.userId;
+
+  users = users.filter((u) => u.id !== userId);
+
+  // Logout this session
+  sessions.delete(req.token);
+
+  // Clear app state to simulate account deletion
+  items = [];
+  testProfile = {
+    name: "",
+    email: "",
+    phone: "",
+    location: "",
+    bio: "",
+    joinDate: "",
+    avatar: null,
+  };
+
+  res.json({ message: "Account deleted", st: true });
 });
 
 app.listen(PORT, () => {
