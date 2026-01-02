@@ -88,6 +88,11 @@ app.post("/api/items", (req, res) => {
     id: items.length + 1,
     name: req.body.name,
     description: req.body.description,
+    frequency: req.body.frequency,
+    unit: req.body.unit,
+    targetValue: req.body.targetValue,
+    streak: req.body.streak,
+    logs: req.body.logs || {},
   };
   items.push(newItem);
   res.status(201).json(newItem);

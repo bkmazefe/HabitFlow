@@ -41,10 +41,14 @@ function App() {
 
   const [habits, setHabits] = useState([]);
 
+  // Kullanici habit listesini serverdan al
   useEffect(() => {
     fetch(URL + "/api/items")
       .then((resp) => resp.json())
-      .then((data) => setHabits(data));
+      .then((data) => {
+        setHabits(data);
+        //console.log(data);
+      });
   }, []);
 
   // Theme'i localStorage'a kaydet ve document'e uygula
@@ -94,15 +98,15 @@ function App() {
     return getCompletion(habit) >= 100;
   };
 
-  // Backend ile değişecek - POST /api/habits endpoint'ine istek atılacak
+  // Yeni habit ekleme istegi gonder ve geri donen yeni itemi ekle
   const handleAddHabit = (formData) => {
-    const newHabit = {
-      id: Math.max(...habits.map((h) => h.id), 0) + 1, // Backend ile değişecek - ID backend'den gelecek
-      ...formData,
-      streak: 0,
-      logs: {},
-    };
-    setHabits([...habits, newHabit]);
+    fetch(URL + "/api/items", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ ...formData, streak: 0, logs: {} }),
+    })
+      .then((response) => response.json())
+      .then((data) => setHabits([...habits, data]));
   };
 
   // Backend ile değişecek - PUT /api/habits/:id endpoint'ine istek atılacak
