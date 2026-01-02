@@ -350,7 +350,29 @@ app.get("/api/export/pdf", (req, res) => {
 });
 
 app.post("/api/auth/login", (req, res) => {
-  //TODO:
+  const { email, password } = req.body;
+
+  if (!isValidEmail(email) || typeof password !== "string") {
+    return res.status(400).json({ message: "Invalid credentials", st: false });
+  }
+
+  const user = users.find((u) => u.email.toLowerCase() === email.toLowerCase());
+
+  if (!user || user.password !== password) {
+    return res
+      .status(401)
+      .json({ message: "Email or password incorrect", st: false });
+  }
+
+  const token = generateToken();
+  sessions.set(token, { userId: user.id, createdAt: new Date().toISOString() });
+
+  res.json({
+    message: "Login successful",
+    st: true,
+    token,
+    user: { id: user.id, name: user.name, email: user.email },
+  });
 });
 
 app.post("/api/auth/register", (req, res) => {
