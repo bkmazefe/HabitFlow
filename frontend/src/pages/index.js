@@ -1,0 +1,8 @@
+export { default as Dashboard } from './Dashboard'
+export { default as Habits } from './Habits'
+export { default as Tracker } from './Tracker'
+export { default as Reports } from './Reports'
+export { default as Settings } from './Settings'
+export { default as Login } from './Login'
+export { default as Register } from './Register'
+export { default as ForgotPassword } from './ForgotPassword'
