@@ -62,11 +62,6 @@ function App() {
     localStorage.setItem("language", language);
   }, [language]);
 
-  // Backend ile değişecek - LocalStorage yerine backend API'ye kaydedilecek
-  useEffect(() => {
-    localStorage.setItem("habits", JSON.stringify(habits));
-  }, [habits]);
-
   // Habit'in completion oranını hesapla
   const getCompletion = (habit) => {
     const todayKey = getTodayKey();
