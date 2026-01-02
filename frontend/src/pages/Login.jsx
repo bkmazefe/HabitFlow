@@ -17,7 +17,7 @@ export default function Login({ onNavigate, onLogin }) {
     setTimeout(() => {
       setIsLoading(false);
       if (onLogin) {
-        onLogin({ email, rememberMe });
+        onLogin({ email, password, rememberMe });
       }
     }, 1500);
   };

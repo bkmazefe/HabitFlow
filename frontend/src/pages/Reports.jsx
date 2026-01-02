@@ -154,14 +154,14 @@ export default function Reports({ habits, t }) {
             {t?.reports?.exportData || "Export Data"}
           </h3>
           <div className="flex gap-4 flex-wrap">
-            {/* Backend ile değişecek - GET /api/export/csv endpoint'inden dosya indirilecek */}
+            {/* GET /api/export/csv*/}
             <button
               className="px-6 py-3 bg-[#99BBE2] text-white rounded-lg hover:bg-[#FC8F7A] transition font-semibold"
               onClick={downloadCSV}
             >
               {t?.reports?.exportCSV || "📊 Export as CSV"}
             </button>
-            {/* Backend ile değişecek - GET /api/export/pdf endpoint'inden dosya indirilecek */}
+            {/* GET /api/export/pdf*/}
             <button
               className="px-6 py-3 bg-[#D7C8F3] text-gray-800 rounded-lg hover:bg-[#99BBE2] hover:text-white transition font-semibold"
               onClick={downloadPDF}
