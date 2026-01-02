@@ -376,7 +376,49 @@ app.post("/api/auth/login", (req, res) => {
 });
 
 app.post("/api/auth/register", (req, res) => {
-  //TODO:
+  const { name, email, password } = req.body;
+
+  if (typeof name !== "string" || name.trim().length < 2) {
+    return res.status(400).json({ message: "Name is required", st: false });
+  }
+  if (!isValidEmail(email)) {
+    return res.status(400).json({ message: "Invalid email", st: false });
+  }
+  if (typeof password !== "string" || password.length < 6) {
+    return res
+      .status(400)
+      .json({ message: "Password must be at least 6 chars", st: false });
+  }
+
+  const exists = users.some(
+    (u) => u.email.toLowerCase() === email.toLowerCase()
+  );
+  if (exists) {
+    return res
+      .status(409)
+      .json({ message: "Email already registered", st: false });
+  }
+
+  const newUser = {
+    id: users.length ? Math.max(...users.map((u) => u.id)) + 1 : 1,
+    name: name.trim(),
+    email: email.toLowerCase().trim(),
+    password, // dev only
+    createdAt: new Date().toISOString(),
+  };
+
+  users.push(newUser);
+
+  // Keep testProfile aligned to simulate "current user"
+  testProfile.name = newUser.name;
+  testProfile.email = newUser.email;
+  testProfile.joinDate = "January 2026";
+
+  res.status(201).json({
+    message: "Registration successful",
+    st: true,
+    user: { id: newUser.id, name: newUser.name, email: newUser.email },
+  });
 });
 
 app.post("/api/auth/logout", (req, res) => {
