@@ -249,11 +249,37 @@ function App() {
     }
   };
 
-  // Backend ile değişecek - POST /api/auth/register endpoint'ine istek atılacak
-  const handleRegister = (userData) => {
-    console.log("Register:", userData);
-    setIsAuthenticated(true);
-    setCurrentPage("dashboard");
+  const handleRegister = async (userData) => {
+    try {
+      const response = await fetch("http://localhost:3001/api/auth/register", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          name: userData.name,
+          email: userData.email,
+          password: userData.password,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.message || "Registration failed");
+      }
+
+      // Optional: store user or token if you later add auth
+      // localStorage.setItem("user", JSON.stringify(data.user));
+
+      console.log("Registration successful:", data);
+
+      setIsAuthenticated(true);
+      setCurrentPage("dashboard");
+    } catch (error) {
+      console.error("Register error:", error.message);
+      alert(error.message);
+    }
   };
 
   // Backend ile değişecek - POST /api/auth/logout endpoint'ine istek atılacak, token silinecek
