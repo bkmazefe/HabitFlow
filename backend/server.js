@@ -63,6 +63,16 @@ let items = [
   },
 ];
 
+let testProfile = {
+  name: "John Doe",
+  email: "john.doe@example.com",
+  phone: "+1 234 567 8900",
+  location: "San Francisco, CA",
+  bio: "Passionate about building better habits and self-improvement. 🚀",
+  joinDate: "December 2025",
+  avatar: null,
+};
+
 // Routes
 app.get("/api", (req, res) => {
   res.json({ message: "Backend API çalışıyor!" });
@@ -139,6 +149,21 @@ app.delete("/api/items/:id", (req, res) => {
   }
   items.splice(index, 1);
   res.json({ message: "Öğe silindi!", st: true });
+});
+
+// GET user profile
+app.get("/api/user/profile", (req, res) => {
+  res.json(testProfile);
+});
+
+// PUT user profile
+app.put("/api/user/profile", (req, res) => {
+  testProfile.name = req.body.name || testProfile.name;
+  testProfile.email = req.body.email || testProfile.email;
+  testProfile.phone = req.body.phone || testProfile.phone;
+  testProfile.location = req.body.location || testProfile.location;
+  testProfile.bio = req.body.bio || testProfile.bio;
+  res.json(testProfile);
 });
 
 app.listen(PORT, () => {
