@@ -113,10 +113,10 @@ app.put("/api/items/:id", (req, res) => {
 app.delete("/api/items/:id", (req, res) => {
   const index = items.findIndex((i) => i.id === parseInt(req.params.id));
   if (index === -1) {
-    return res.status(404).json({ message: "Öğe bulunamadı" });
+    return res.status(404).json({ message: "Öğe bulunamadı", st: false });
   }
   items.splice(index, 1);
-  res.json({ message: "Öğe silindi" });
+  res.json({ message: "Öğe silindi!", st: true });
 });
 
 app.listen(PORT, () => {

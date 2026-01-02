@@ -124,7 +124,16 @@ function App() {
 
   // Backend ile değişecek - DELETE /api/habits/:id endpoint'ine istek atılacak
   const handleDeleteHabit = (habitId) => {
-    setHabits(habits.filter((h) => h.id !== habitId));
+    fetch(URL + "/api/items/" + habitId, {
+      method: "DELETE",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ id: habitId }),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.st == true) setHabits(habits.filter((h) => h.id !== habitId));
+        alert(data.message);
+      });
   };
 
   // Backend ile değişecek - POST /api/habits/:id/log endpoint'ine istek atılacak
