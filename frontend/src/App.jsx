@@ -177,31 +177,36 @@ function App() {
     });
   };
 
-  // Backend ile değişecek - POST /api/habits/:id/toggle endpoint'ine istek atılacak
+  // Habiti bugun icin tamamlandi olarak isaretle /api/habits/:id/toggle
   const handleToggleHabit = (habitId, completed) => {
     const todayKey = getTodayKey();
-    setHabits(
-      habits.map((h) => {
-        if (h.id === habitId) {
-          const wasCompletedToday = (h.logs[todayKey] || 0) > 0;
+    habits.map((h) => {
+      if (h.id === habitId) {
+        const wasCompletedToday = (h.logs[todayKey] || 0) > 0;
 
-          // Streak sadece bugün İLK KEZ tamamlandığında artar
-          let newStreak = h.streak;
-          if (completed && !wasCompletedToday) {
-            newStreak = h.streak + 1;
-          } else if (!completed && wasCompletedToday) {
-            newStreak = Math.max(h.streak - 1, 0);
-          }
+        // Streak sadece bugün İLK KEZ tamamlandığında artar
+        let newStreak = h.streak;
+        if (completed && !wasCompletedToday) {
+          newStreak = h.streak + 1;
+        } else if (!completed && wasCompletedToday) {
+          newStreak = Math.max(h.streak - 1, 0);
+        }
 
-          return {
+        fetch(URL + "/api/items/" + habitId + "/toggle", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
             ...h,
             logs: { ...h.logs, [todayKey]: completed ? 1 : 0 },
             streak: newStreak,
-          };
-        }
-        return h;
-      })
-    );
+          }),
+        })
+          .then((response) => response.json())
+          .then((data) =>
+            setHabits(habits.map((h) => (h.id === data.id ? data : h)))
+          );
+      }
+    });
   };
 
   // Habits'e completion ve completedToday ekle

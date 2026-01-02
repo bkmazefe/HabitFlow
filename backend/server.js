@@ -120,6 +120,17 @@ app.post("/api/items/:id/log", (req, res) => {
   res.json(item);
 });
 
+// POST log item
+app.post("/api/items/:id/toggle", (req, res) => {
+  const item = items.find((i) => i.id === parseInt(req.params.id));
+  if (!item) {
+    return res.status(404).json({ message: "Öğe bulunamadı" });
+  }
+  item.logs = req.body.logs || item.logs || {};
+  item.streak = req.body.streak || item.streak || 0;
+  res.json(item);
+});
+
 // DELETE item
 app.delete("/api/items/:id", (req, res) => {
   const index = items.findIndex((i) => i.id === parseInt(req.params.id));
