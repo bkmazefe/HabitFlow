@@ -1,22 +1,22 @@
-import { useState } from 'react'
-import { FiMail, FiArrowLeft, FiSend, FiCheckCircle } from 'react-icons/fi'
+import { useState } from "react";
+import { FiMail, FiArrowLeft, FiSend, FiCheckCircle } from "react-icons/fi";
 
 export default function ForgotPassword({ onNavigate }) {
-  const [email, setEmail] = useState('')
-  const [isLoading, setIsLoading] = useState(false)
-  const [isSubmitted, setIsSubmitted] = useState(false)
+  const [email, setEmail] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const [isSubmitted, setIsSubmitted] = useState(false);
 
   // Backend ile değişecek - POST /api/auth/forgot-password endpoint'ine istek atılacak
   const handleSubmit = async (e) => {
-    e.preventDefault()
-    setIsLoading(true)
-    
+    e.preventDefault();
+    setIsLoading(true);
+
     // Backend ile değişecek - Gerçek API çağrısı yapılacak, e-posta gönderilecek
     setTimeout(() => {
-      setIsLoading(false)
-      setIsSubmitted(true)
-    }, 1500)
-  }
+      setIsLoading(false);
+      setIsSubmitted(true);
+    }, 1500);
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-[#D7C8F3]/20 via-white to-[#99BBE2]/20 flex items-center justify-center p-4">
@@ -30,7 +30,7 @@ export default function ForgotPassword({ onNavigate }) {
       <div className="relative w-full max-w-md">
         {/* Back Button */}
         <button
-          onClick={() => onNavigate && onNavigate('login')}
+          onClick={() => onNavigate && onNavigate("login")}
           className="flex items-center gap-2 text-gray-500 hover:text-[#99BBE2] transition-colors mb-8"
         >
           <FiArrowLeft size={20} />
@@ -69,7 +69,10 @@ export default function ForgotPassword({ onNavigate }) {
                     Email Address
                   </label>
                   <div className="relative">
-                    <FiMail className="absolute left-4 top-1/2 -translate-y-1/2 text-[#99BBE2]" size={20} />
+                    <FiMail
+                      className="absolute left-4 top-1/2 -translate-y-1/2 text-[#99BBE2]"
+                      size={20}
+                    />
                     <input
                       type="email"
                       value={email}
@@ -111,13 +114,13 @@ export default function ForgotPassword({ onNavigate }) {
                 Check your email!
               </h2>
               <p className="text-gray-500 text-center mb-6">
-                We've sent a password reset link to{' '}
+                We've sent a password reset link to{" "}
                 <span className="font-semibold text-[#99BBE2]">{email}</span>
               </p>
 
               <div className="bg-gradient-to-r from-[#D7C8F3]/10 to-[#99BBE2]/10 rounded-xl p-4 mb-6">
                 <p className="text-sm text-gray-600 text-center">
-                  Didn't receive the email? Check your spam folder or{' '}
+                  Didn't receive the email? Check your spam folder or{" "}
                   <button
                     onClick={() => setIsSubmitted(false)}
                     className="text-[#99BBE2] hover:underline font-medium"
@@ -128,7 +131,7 @@ export default function ForgotPassword({ onNavigate }) {
               </div>
 
               <button
-                onClick={() => onNavigate && onNavigate('login')}
+                onClick={() => onNavigate && onNavigate("login")}
                 className="w-full py-3 bg-gradient-to-r from-[#D7C8F3] to-[#99BBE2] text-white font-semibold rounded-xl hover:shadow-lg hover:shadow-[#99BBE2]/30 transition-all transform hover:scale-[1.02] active:scale-[0.98] flex items-center justify-center gap-2"
               >
                 <FiArrowLeft size={18} />
@@ -140,9 +143,9 @@ export default function ForgotPassword({ onNavigate }) {
           {/* Additional Links */}
           {!isSubmitted && (
             <p className="text-center mt-6 text-gray-600">
-              Remember your password?{' '}
+              Remember your password?{" "}
               <button
-                onClick={() => onNavigate && onNavigate('login')}
+                onClick={() => onNavigate && onNavigate("login")}
                 className="text-[#99BBE2] hover:text-[#D7C8F3] font-semibold transition-colors"
               >
                 Sign in
@@ -153,12 +156,12 @@ export default function ForgotPassword({ onNavigate }) {
 
         {/* Help Text */}
         <p className="text-center text-gray-400 text-sm mt-6">
-          Need help?{' '}
+          Need help?{" "}
           <button className="text-[#F2AFC1] hover:underline">
             Contact Support
           </button>
         </p>
       </div>
     </div>
-  )
+  );
 }

@@ -13,8 +13,7 @@ import {
 } from "./pages";
 import { translations } from "./utils/translations";
 
-const PORT = 3001;
-const URL = "http://localhost:" + PORT;
+const URL = "https://habit-flow-backend-tan.vercel.app";
 
 // Helper: bugünün tarihini YYYY-MM-DD formatında al
 const getTodayKey = () => new Date().toISOString().split("T")[0];

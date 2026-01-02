@@ -1,8 +1,7 @@
 import { useState, useEffect } from "react";
 import { ProgressChart } from "../components";
 
-const PORT = 3001;
-const URL = "http://localhost:" + PORT;
+const URL = "https://habit-flow-backend-tan.vercel.app";
 
 export default function Reports({ habits, t }) {
   const monthlyData = habits.map((h) => ({
@@ -28,7 +27,7 @@ export default function Reports({ habits, t }) {
 
   const downloadCSV = async () => {
     try {
-      const response = await fetch("http://localhost:3001/api/export/csv");
+      const response = await fetch(URL + "/api/export/csv");
 
       if (!response.ok) {
         throw new Error("Failed to download CSV");
@@ -53,7 +52,7 @@ export default function Reports({ habits, t }) {
 
   const downloadPDF = async () => {
     try {
-      const response = await fetch("http://localhost:3001/api/export/pdf");
+      const response = await fetch(URL + "/api/export/pdf");
 
       if (!response.ok) {
         throw new Error("Failed to download PDF");

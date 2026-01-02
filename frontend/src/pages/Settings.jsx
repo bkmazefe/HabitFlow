@@ -12,8 +12,7 @@ import {
   FiMoon,
 } from "react-icons/fi";
 
-const PORT = 3001;
-const URL = "http://localhost:" + PORT;
+const URL = "https://habit-flow-backend-tan.vercel.app";
 
 export default function Settings({
   theme,
