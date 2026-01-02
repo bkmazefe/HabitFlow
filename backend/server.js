@@ -421,8 +421,9 @@ app.post("/api/auth/register", (req, res) => {
   });
 });
 
-app.post("/api/auth/logout", (req, res) => {
-  //TODO:
+app.post("/api/auth/logout", requireAuth, (req, res) => {
+  sessions.delete(req.token);
+  res.json({ message: "Logged out", st: true });
 });
 
 app.post("/api/auth/forgot-password", (req, res) => {
