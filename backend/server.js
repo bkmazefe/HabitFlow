@@ -211,23 +211,7 @@ app.put("/api/user/profile", (req, res) => {
 });
 
 app.get("/api/stats/categories", (req, res) => {
-  // Basic computed stats for convenience
-  const totalItems = items.length;
-
-  // Simple aggregate: count logs across all items
-  const totalLogs = items.reduce((acc, item) => {
-    const count = item.logs ? Object.keys(item.logs).length : 0;
-    return acc + count;
-  }, 0);
-
-  res.json({
-    categories: categoryData,
-    meta: {
-      totalItems,
-      totalLogs,
-      generatedAt: new Date().toISOString(),
-    },
-  });
+  res.json(categoryData);
 });
 
 app.post("/api/newsletter/subscribe", (req, res) => {
