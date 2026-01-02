@@ -109,9 +109,17 @@ function App() {
       .then((data) => setHabits([...habits, data]));
   };
 
-  // Backend ile değişecek - PUT /api/habits/:id endpoint'ine istek atılacak
+  // Listedeki bir habiti servera update istegi atip geri donuse gore guncelleme
   const handleUpdateHabit = (updatedHabit) => {
-    setHabits(habits.map((h) => (h.id === updatedHabit.id ? updatedHabit : h)));
+    fetch(URL + "/api/items/" + updatedHabit.id, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(updatedHabit),
+    })
+      .then((response) => response.json())
+      .then((data) =>
+        setHabits(habits.map((h) => (h.id === data.id ? data : h)))
+      );
   };
 
   // Backend ile değişecek - DELETE /api/habits/:id endpoint'ine istek atılacak
