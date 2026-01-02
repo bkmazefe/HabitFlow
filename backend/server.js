@@ -231,7 +231,22 @@ app.get("/api/stats/categories", (req, res) => {
 });
 
 app.post("/api/newsletter/subscribe", (req, res) => {
-  //TODO:
+  const { email } = req.body;
+
+  if (!isValidEmail(email)) {
+    return res.status(400).json({ message: "Invalid email", st: false });
+  }
+
+  const normalized = email.toLowerCase().trim();
+  const already = newsletterSubscribers.has(normalized);
+
+  newsletterSubscribers.add(normalized);
+
+  res.status(already ? 200 : 201).json({
+    message: already ? "Already subscribed" : "Subscribed successfully",
+    st: true,
+    email: normalized,
+  });
 });
 
 app.get("/api/export/csv", (req, res) => {
