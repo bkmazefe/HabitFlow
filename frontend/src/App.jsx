@@ -122,7 +122,7 @@ function App() {
       );
   };
 
-  // Backend ile değişecek - DELETE /api/habits/:id endpoint'ine istek atılacak
+  // Habit silme servera istek atiyor, eger st == true ise idyi local olarak listeden cikariyoruz
   const handleDeleteHabit = (habitId) => {
     fetch(URL + "/api/items/" + habitId, {
       method: "DELETE",
@@ -136,39 +136,45 @@ function App() {
       });
   };
 
-  // Backend ile değişecek - POST /api/habits/:id/log endpoint'ine istek atılacak
+  // Habit track verisini her habite ozel guncelle /api/items/:id/log
   const handleLogValue = (habitId, value) => {
     const todayKey = getTodayKey();
-    setHabits(
-      habits.map((h) => {
-        if (h.id === habitId) {
-          const previousTodayValue = h.logs[todayKey] || 0;
-          const wasCompletedToday =
-            h.unit === "none"
-              ? previousTodayValue > 0
-              : previousTodayValue / h.targetValue >= 1;
 
-          const newLogs = { ...h.logs, [todayKey]: Number(value) };
-          const nowCompleted =
-            h.unit === "none" ? value > 0 : Number(value) / h.targetValue >= 1;
+    habits.forEach((h) => {
+      if (h.id === habitId) {
+        const previousTodayValue = h.logs[todayKey] || 0;
+        const wasCompletedToday =
+          h.unit === "none"
+            ? previousTodayValue > 0
+            : previousTodayValue / h.targetValue >= 1;
 
-          // Streak sadece bugün İLK KEZ tamamlandığında artar
-          let newStreak = h.streak;
-          if (nowCompleted && !wasCompletedToday) {
-            newStreak = h.streak + 1;
-          } else if (!nowCompleted && wasCompletedToday) {
-            newStreak = Math.max(h.streak - 1, 0);
-          }
+        const newLogs = { ...h.logs, [todayKey]: Number(value) };
+        const nowCompleted =
+          h.unit === "none" ? value > 0 : Number(value) / h.targetValue >= 1;
 
-          return {
+        // Streak sadece bugün İLK KEZ tamamlandığında artar
+        let newStreak = h.streak;
+        if (nowCompleted && !wasCompletedToday) {
+          newStreak = h.streak + 1;
+        } else if (!nowCompleted && wasCompletedToday) {
+          newStreak = Math.max(h.streak - 1, 0);
+        }
+
+        fetch(URL + "/api/items/" + habitId + "/log", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
             ...h,
             logs: newLogs,
             streak: newStreak,
-          };
-        }
-        return h;
-      })
-    );
+          }),
+        })
+          .then((response) => response.json())
+          .then((data) =>
+            setHabits(habits.map((h) => (h.id === data.id ? data : h)))
+          );
+      }
+    });
   };
 
   // Backend ile değişecek - POST /api/habits/:id/toggle endpoint'ine istek atılacak
