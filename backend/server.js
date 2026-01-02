@@ -166,6 +166,46 @@ app.put("/api/user/profile", (req, res) => {
   res.json(testProfile);
 });
 
+app.get("/api/stats/categories", (req, res) => {
+  //TODO:
+});
+
+app.post("/api/newsletter/subscribe", (req, res) => {
+  //TODO:
+});
+
+app.get("/api/export/csv", (req, res) => {
+  //TODO:
+});
+
+app.get("/api/export/pdf", (req, res) => {
+  //TODO:
+});
+
+app.post("/api/auth/login", (req, res) => {
+  //TODO:
+});
+
+app.post("/api/auth/register", (req, res) => {
+  //TODO:
+});
+
+app.post("/api/auth/logout", (req, res) => {
+  //TODO:
+});
+
+app.post("/api/auth/forgot-password", (req, res) => {
+  //TODO:
+});
+
+app.post("/api/auth/change-password", (req, res) => {
+  //TODO:
+});
+
+app.delete("/api/user/account", (req, res) => {
+  //TODO:
+});
+
 app.listen(PORT, () => {
   console.log(`Server ${PORT} portunda çalışıyor`);
 });
