@@ -1,6 +1,8 @@
 const express = require("express");
 const cors = require("cors");
 require("dotenv").config();
+const crypto = require("crypto");
+const PDFDocument = require("pdfkit");
 
 const app = express();
 const PORT = process.env.PORT || 3001;
@@ -72,6 +74,48 @@ let testProfile = {
   joinDate: "December 2025",
   avatar: null,
 };
+
+const categoryData = [
+  { label: "Health", value: 85 },
+  { label: "Learning", value: 72 },
+  { label: "Productivity", value: 68 },
+];
+
+let sessions = new Map(); // token -> { userId, createdAt }
+let newsletterSubscribers = new Set(); // emails
+
+// In-memory "auth" + newsletter (dev/demo only)
+let users = [
+  {
+    id: 1,
+    name: testProfile.name,
+    email: testProfile.email,
+    // DO NOT do this in production; hash passwords properly (bcrypt/argon2)
+    password: "password123",
+    createdAt: new Date().toISOString(),
+  },
+];
+
+function isValidEmail(email) {
+  return typeof email === "string" && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+}
+
+function generateToken() {
+  return crypto.randomBytes(24).toString("hex");
+}
+
+function requireAuth(req, res, next) {
+  const auth = req.headers.authorization || "";
+  const token = auth.startsWith("Bearer ") ? auth.slice(7) : null;
+
+  if (!token || !sessions.has(token)) {
+    return res.status(401).json({ message: "Unauthorized", st: false });
+  }
+
+  req.session = sessions.get(token);
+  req.token = token;
+  next();
+}
 
 // Routes
 app.get("/api", (req, res) => {
