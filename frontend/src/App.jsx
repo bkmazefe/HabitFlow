@@ -220,7 +220,7 @@ function App() {
   const handleLogin = async (credentials) => {
     try {
       console.log(credentials);
-      const response = await fetch("http://localhost:3001/api/auth/login", {
+      const response = await fetch(URL + "/api/auth/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -250,7 +250,7 @@ function App() {
 
   const handleRegister = async (userData) => {
     try {
-      const response = await fetch("http://localhost:3001/api/auth/register", {
+      const response = await fetch(URL + "/api/auth/register", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
