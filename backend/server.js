@@ -427,7 +427,23 @@ app.post("/api/auth/logout", requireAuth, (req, res) => {
 });
 
 app.post("/api/auth/forgot-password", (req, res) => {
-  //TODO:
+  const { email } = req.body;
+
+  if (!isValidEmail(email)) {
+    return res.status(400).json({ message: "Invalid email", st: false });
+  }
+
+  const user = users.find((u) => u.email.toLowerCase() === email.toLowerCase());
+
+  // Do not reveal whether user exists (best practice), but for dev we can still return a token when exists
+  const resetToken = user ? generateToken() : null;
+
+  res.json({
+    message: "If that email exists, a reset link has been sent (mock).",
+    st: true,
+    // dev-only convenience:
+    resetToken,
+  });
 });
 
 app.post("/api/auth/change-password", (req, res) => {
