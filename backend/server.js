@@ -250,11 +250,103 @@ app.post("/api/newsletter/subscribe", (req, res) => {
 });
 
 app.get("/api/export/csv", (req, res) => {
-  //TODO:
+  // CSV escape helper
+  const esc = (v) => {
+    const s = v === null || v === undefined ? "" : String(v);
+    // Wrap in quotes if it contains comma, quote, or newline
+    if (/[",\n]/.test(s)) return `"${s.replace(/"/g, '""')}"`;
+    return s;
+  };
+
+  // Flatten logs count for export
+  const header = [
+    "id",
+    "name",
+    "description",
+    "frequency",
+    "unit",
+    "targetValue",
+    "streak",
+    "logCount",
+  ];
+
+  const rows = items.map((it) => [
+    it.id,
+    it.name,
+    it.description,
+    it.frequency,
+    it.unit,
+    it.targetValue,
+    it.streak,
+    it.logs ? Object.keys(it.logs).length : 0,
+  ]);
+
+  const csv = [header, ...rows].map((r) => r.map(esc).join(",")).join("\n");
+
+  res.setHeader("Content-Type", "text/csv; charset=utf-8");
+  res.setHeader(
+    "Content-Disposition",
+    'attachment; filename="habits_export.csv"'
+  );
+  res.status(200).send(csv);
 });
 
 app.get("/api/export/pdf", (req, res) => {
-  //TODO:
+  const doc = new PDFDocument({ margin: 50 });
+
+  res.setHeader("Content-Type", "application/pdf");
+  res.setHeader(
+    "Content-Disposition",
+    'attachment; filename="habits_export.pdf"'
+  );
+
+  doc.pipe(res);
+
+  // Title
+  doc.fontSize(20).text("Habit Tracker Export", { align: "left" });
+  doc.moveDown(0.5);
+  doc
+    .fontSize(10)
+    .fillColor("gray")
+    .text(`Generated: ${new Date().toISOString()}`);
+  doc.fillColor("black");
+  doc.moveDown();
+
+  // Profile
+  doc.fontSize(14).text("User Profile");
+  doc.moveDown(0.3);
+  doc.fontSize(11).text(`Name: ${testProfile.name}`);
+  doc.text(`Email: ${testProfile.email}`);
+  doc.text(`Phone: ${testProfile.phone}`);
+  doc.text(`Location: ${testProfile.location}`);
+  doc.text(`Join Date: ${testProfile.joinDate}`);
+  doc.moveDown();
+  doc.text(`Bio: ${testProfile.bio}`);
+  doc.moveDown();
+
+  // Items
+  doc.fontSize(14).text("Items");
+  doc.moveDown(0.5);
+
+  items.forEach((it, idx) => {
+    doc.fontSize(12).text(`${idx + 1}. ${it.name} (ID: ${it.id})`);
+    doc
+      .fontSize(10)
+      .fillColor("gray")
+      .text(it.description || "");
+    doc.fillColor("black");
+    doc
+      .fontSize(11)
+      .text(
+        `Frequency: ${it.frequency} | Target: ${it.targetValue} ${it.unit} | Streak: ${it.streak}`
+      );
+
+    const logCount = it.logs ? Object.keys(it.logs).length : 0;
+    doc.fontSize(11).text(`Logs: ${logCount} entries`);
+    doc.moveDown(0.6);
+  });
+
+  doc.end();
 });
 
 app.post("/api/auth/login", (req, res) => {
