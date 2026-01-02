@@ -26,6 +26,56 @@ export default function Reports({ habits, t }) {
       });
   }, []);
 
+  const downloadCSV = async () => {
+    try {
+      const response = await fetch("http://localhost:3001/api/export/csv");
+
+      if (!response.ok) {
+        throw new Error("Failed to download CSV");
+      }
+
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(blob);
+
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "habits_export.csv";
+      document.body.appendChild(a);
+      a.click();
+
+      // Cleanup
+      a.remove();
+      window.URL.revokeObjectURL(url);
+    } catch (error) {
+      console.error("CSV download failed:", error);
+    }
+  };
+
+  const downloadPDF = async () => {
+    try {
+      const response = await fetch("http://localhost:3001/api/export/pdf");
+
+      if (!response.ok) {
+        throw new Error("Failed to download PDF");
+      }
+
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(blob);
+
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "habits_export.pdf";
+      document.body.appendChild(a);
+      a.click();
+
+      // Cleanup
+      a.remove();
+      window.URL.revokeObjectURL(url);
+    } catch (error) {
+      console.error("PDF download failed:", error);
+    }
+  };
+
   return (
     <div className="w-full bg-white dark:bg-transparent transition-colors duration-300">
       <div className="max-w-6xl mx-auto px-4 py-8">
@@ -105,11 +155,17 @@ export default function Reports({ habits, t }) {
           </h3>
           <div className="flex gap-4 flex-wrap">
             {/* Backend ile değişecek - GET /api/export/csv endpoint'inden dosya indirilecek */}
-            <button className="px-6 py-3 bg-[#99BBE2] text-white rounded-lg hover:bg-[#FC8F7A] transition font-semibold">
+            <button
+              className="px-6 py-3 bg-[#99BBE2] text-white rounded-lg hover:bg-[#FC8F7A] transition font-semibold"
+              onClick={downloadCSV}
+            >
               {t?.reports?.exportCSV || "📊 Export as CSV"}
             </button>
             {/* Backend ile değişecek - GET /api/export/pdf endpoint'inden dosya indirilecek */}
-            <button className="px-6 py-3 bg-[#D7C8F3] text-gray-800 rounded-lg hover:bg-[#99BBE2] hover:text-white transition font-semibold">
+            <button
+              className="px-6 py-3 bg-[#D7C8F3] text-gray-800 rounded-lg hover:bg-[#99BBE2] hover:text-white transition font-semibold"
+              onClick={downloadPDF}
+            >
               {t?.reports?.exportPDF || "📄 Export as PDF"}
             </button>
           </div>
