@@ -1,67 +1,75 @@
-import { useState } from 'react'
-import { FiMail, FiLock, FiEye, FiEyeOff, FiUser, FiArrowRight, FiCheck } from 'react-icons/fi'
+import { useState } from "react";
+import {
+  FiMail,
+  FiLock,
+  FiEye,
+  FiEyeOff,
+  FiUser,
+  FiArrowRight,
+  FiCheck,
+} from "react-icons/fi";
 
 export default function Register({ onNavigate, onRegister }) {
   const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    password: '',
-    confirmPassword: '',
-  })
-  const [showPassword, setShowPassword] = useState(false)
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false)
-  const [agreeTerms, setAgreeTerms] = useState(false)
-  const [isLoading, setIsLoading] = useState(false)
+    name: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
+  });
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [agreeTerms, setAgreeTerms] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value })
-  }
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
 
   // Backend ile değişecek - POST /api/auth/register endpoint'ine istek atılacak
   const handleSubmit = async (e) => {
-    e.preventDefault()
+    e.preventDefault();
     if (formData.password !== formData.confirmPassword) {
-      alert('Passwords do not match!')
-      return
+      alert("Passwords do not match!");
+      return;
     }
     if (!agreeTerms) {
-      alert('Please agree to the terms and conditions')
-      return
+      alert("Please agree to the terms and conditions");
+      return;
     }
-    
-    setIsLoading(true)
+
+    setIsLoading(true);
     // Backend ile değişecek - Gerçek API çağrısı yapılacak
     setTimeout(() => {
-      setIsLoading(false)
+      setIsLoading(false);
       if (onRegister) {
-        onRegister(formData)
+        onRegister(formData);
       }
-    }, 1500)
-  }
+    }, 1500);
+  };
 
   // Password strength checker
   const getPasswordStrength = () => {
-    const password = formData.password
-    if (!password) return { strength: 0, label: '', color: '' }
-    
-    let strength = 0
-    if (password.length >= 8) strength++
-    if (/[a-z]/.test(password) && /[A-Z]/.test(password)) strength++
-    if (/\d/.test(password)) strength++
-    if (/[^a-zA-Z0-9]/.test(password)) strength++
-    
-    const levels = [
-      { strength: 0, label: '', color: '' },
-      { strength: 1, label: 'Weak', color: '#FC8F7A' },
-      { strength: 2, label: 'Fair', color: '#FDCF7D' },
-      { strength: 3, label: 'Good', color: '#99BBE2' },
-      { strength: 4, label: 'Strong', color: '#D7C8F3' },
-    ]
-    
-    return levels[strength]
-  }
+    const password = formData.password;
+    if (!password) return { strength: 0, label: "", color: "" };
 
-  const passwordStrength = getPasswordStrength()
+    let strength = 0;
+    if (password.length >= 8) strength++;
+    if (/[a-z]/.test(password) && /[A-Z]/.test(password)) strength++;
+    if (/\d/.test(password)) strength++;
+    if (/[^a-zA-Z0-9]/.test(password)) strength++;
+
+    const levels = [
+      { strength: 0, label: "", color: "" },
+      { strength: 1, label: "Weak", color: "#FC8F7A" },
+      { strength: 2, label: "Fair", color: "#FDCF7D" },
+      { strength: 3, label: "Good", color: "#99BBE2" },
+      { strength: 4, label: "Strong", color: "#D7C8F3" },
+    ];
+
+    return levels[strength];
+  };
+
+  const passwordStrength = getPasswordStrength();
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-[#F2AFC1]/20 via-white to-[#FDCF7D]/20 flex items-center justify-center p-4">
@@ -78,7 +86,9 @@ export default function Register({ onNavigate, onRegister }) {
           <h1 className="text-4xl font-bold bg-gradient-to-r from-[#F2AFC1] via-[#D7C8F3] to-[#99BBE2] bg-clip-text text-transparent">
             HabitFlow
           </h1>
-          <p className="text-gray-500 mt-2">Create your account and start building better habits!</p>
+          <p className="text-gray-500 mt-2">
+            Create your account and start building better habits!
+          </p>
         </div>
 
         {/* Register Card */}
@@ -90,7 +100,10 @@ export default function Register({ onNavigate, onRegister }) {
                 Full Name
               </label>
               <div className="relative">
-                <FiUser className="absolute left-4 top-1/2 -translate-y-1/2 text-[#F2AFC1]" size={20} />
+                <FiUser
+                  className="absolute left-4 top-1/2 -translate-y-1/2 text-[#F2AFC1]"
+                  size={20}
+                />
                 <input
                   type="text"
                   name="name"
@@ -109,7 +122,10 @@ export default function Register({ onNavigate, onRegister }) {
                 Email Address
               </label>
               <div className="relative">
-                <FiMail className="absolute left-4 top-1/2 -translate-y-1/2 text-[#F2AFC1]" size={20} />
+                <FiMail
+                  className="absolute left-4 top-1/2 -translate-y-1/2 text-[#F2AFC1]"
+                  size={20}
+                />
                 <input
                   type="email"
                   name="email"
@@ -128,9 +144,12 @@ export default function Register({ onNavigate, onRegister }) {
                 Password
               </label>
               <div className="relative">
-                <FiLock className="absolute left-4 top-1/2 -translate-y-1/2 text-[#F2AFC1]" size={20} />
+                <FiLock
+                  className="absolute left-4 top-1/2 -translate-y-1/2 text-[#F2AFC1]"
+                  size={20}
+                />
                 <input
-                  type={showPassword ? 'text' : 'password'}
+                  type={showPassword ? "text" : "password"}
                   name="password"
                   value={formData.password}
                   onChange={handleChange}
@@ -155,12 +174,18 @@ export default function Register({ onNavigate, onRegister }) {
                         key={level}
                         className="h-1 flex-1 rounded-full transition-all"
                         style={{
-                          backgroundColor: level <= passwordStrength.strength ? passwordStrength.color : '#e5e7eb',
+                          backgroundColor:
+                            level <= passwordStrength.strength
+                              ? passwordStrength.color
+                              : "#e5e7eb",
                         }}
                       />
                     ))}
                   </div>
-                  <p className="text-xs" style={{ color: passwordStrength.color }}>
+                  <p
+                    className="text-xs"
+                    style={{ color: passwordStrength.color }}
+                  >
                     {passwordStrength.label}
                   </p>
                 </div>
@@ -173,19 +198,24 @@ export default function Register({ onNavigate, onRegister }) {
                 Confirm Password
               </label>
               <div className="relative">
-                <FiLock className="absolute left-4 top-1/2 -translate-y-1/2 text-[#F2AFC1]" size={20} />
+                <FiLock
+                  className="absolute left-4 top-1/2 -translate-y-1/2 text-[#F2AFC1]"
+                  size={20}
+                />
                 <input
-                  type={showConfirmPassword ? 'text' : 'password'}
+                  type={showConfirmPassword ? "text" : "password"}
                   name="confirmPassword"
                   value={formData.confirmPassword}
                   onChange={handleChange}
                   placeholder="••••••••"
                   className={`w-full pl-12 pr-12 py-3 bg-gray-50 border-2 rounded-xl focus:outline-none focus:bg-white transition-all ${
-                    formData.confirmPassword && formData.password !== formData.confirmPassword
-                      ? 'border-[#FC8F7A]'
-                      : formData.confirmPassword && formData.password === formData.confirmPassword
-                      ? 'border-[#D7C8F3]'
-                      : 'border-transparent focus:border-[#F2AFC1]'
+                    formData.confirmPassword &&
+                    formData.password !== formData.confirmPassword
+                      ? "border-[#FC8F7A]"
+                      : formData.confirmPassword &&
+                        formData.password === formData.confirmPassword
+                      ? "border-[#D7C8F3]"
+                      : "border-transparent focus:border-[#F2AFC1]"
                   }`}
                   required
                 />
@@ -194,11 +224,19 @@ export default function Register({ onNavigate, onRegister }) {
                   onClick={() => setShowConfirmPassword(!showConfirmPassword)}
                   className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-[#F2AFC1] transition-colors"
                 >
-                  {showConfirmPassword ? <FiEyeOff size={20} /> : <FiEye size={20} />}
+                  {showConfirmPassword ? (
+                    <FiEyeOff size={20} />
+                  ) : (
+                    <FiEye size={20} />
+                  )}
                 </button>
-                {formData.confirmPassword && formData.password === formData.confirmPassword && (
-                  <FiCheck className="absolute right-12 top-1/2 -translate-y-1/2 text-[#D7C8F3]" size={20} />
-                )}
+                {formData.confirmPassword &&
+                  formData.password === formData.confirmPassword && (
+                    <FiCheck
+                      className="absolute right-12 top-1/2 -translate-y-1/2 text-[#D7C8F3]"
+                      size={20}
+                    />
+                  )}
               </div>
             </div>
 
@@ -211,12 +249,18 @@ export default function Register({ onNavigate, onRegister }) {
                 className="w-5 h-5 mt-0.5 rounded border-gray-300 text-[#F2AFC1] focus:ring-[#F2AFC1]"
               />
               <span className="text-sm text-gray-600">
-                I agree to the{' '}
-                <button type="button" className="text-[#99BBE2] hover:underline">
+                I agree to the{" "}
+                <button
+                  type="button"
+                  className="text-[#99BBE2] hover:underline"
+                >
                   Terms of Service
-                </button>{' '}
-                and{' '}
-                <button type="button" className="text-[#99BBE2] hover:underline">
+                </button>{" "}
+                and{" "}
+                <button
+                  type="button"
+                  className="text-[#99BBE2] hover:underline"
+                >
                   Privacy Policy
                 </button>
               </span>
@@ -241,9 +285,9 @@ export default function Register({ onNavigate, onRegister }) {
 
           {/* Login Link */}
           <p className="text-center mt-6 text-gray-600">
-            Already have an account?{' '}
+            Already have an account?{" "}
             <button
-              onClick={() => onNavigate && onNavigate('login')}
+              onClick={() => onNavigate && onNavigate("login")}
               className="text-[#99BBE2] hover:text-[#D7C8F3] font-semibold transition-colors"
             >
               Sign in
@@ -252,5 +296,5 @@ export default function Register({ onNavigate, onRegister }) {
         </div>
       </div>
     </div>
-  )
+  );
 }

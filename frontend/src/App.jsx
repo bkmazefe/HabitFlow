@@ -282,8 +282,15 @@ function App() {
     }
   };
 
-  // Backend ile değişecek - POST /api/auth/logout endpoint'ine istek atılacak, token silinecek
+  // LOGOUT POST /api/auth/logout
   const handleLogout = () => {
+    fetch(URL + "/api/auth/logout", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(localStorage.getItem("token")),
+    });
+
+    localStorage.removeItem("token");
     setIsAuthenticated(false);
     setCurrentPage("login");
   };
