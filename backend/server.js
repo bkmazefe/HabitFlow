@@ -446,8 +446,32 @@ app.post("/api/auth/forgot-password", (req, res) => {
   });
 });
 
-app.post("/api/auth/change-password", (req, res) => {
-  //TODO:
+app.post("/api/auth/change-password", requireAuth, (req, res) => {
+  const { currentPassword, newPassword } = req.body;
+
+  if (typeof currentPassword !== "string" || typeof newPassword !== "string") {
+    return res.status(400).json({ message: "Invalid payload", st: false });
+  }
+  if (newPassword.length < 6) {
+    return res
+      .status(400)
+      .json({ message: "New password must be at least 6 chars", st: false });
+  }
+
+  const user = users.find((u) => u.id === req.session.userId);
+  if (!user) {
+    return res.status(401).json({ message: "Unauthorized", st: false });
+  }
+
+  if (user.password !== currentPassword) {
+    return res
+      .status(401)
+      .json({ message: "Current password incorrect", st: false });
+  }
+
+  user.password = newPassword;
+
+  res.json({ message: "Password changed successfully", st: true });
 });
 
 app.delete("/api/user/account", (req, res) => {
